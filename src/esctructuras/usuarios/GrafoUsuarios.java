@@ -11,7 +11,7 @@ public class GrafoUsuarios {
     private int capacidad;
     private int cantidad;
 
-     public GrafoUsuarios(int capacidad) {    ///Constructor del grafo, inicializa la matriz y el array de usuarios
+    public GrafoUsuarios(int capacidad) {    ///Constructor del grafo, inicializa la matriz y el array de usuarios
         this.capacidad = capacidad;
         this.cantidad = 0;
         this.usuarios = new Usuario[capacidad];
@@ -34,6 +34,37 @@ public class GrafoUsuarios {
         return -1;
     }
 
+
+    //Falta ver ver estooooooooooooooooooooooo puto el que lee
+    public boolean eliminarUsuario(int idUsuario) {   //logica para eliminar usuario, buscamos su indice en el array, si no se encuentra retornamos false
+        int indice = obtenerIndice(idUsuario);
+        if (indice == -1) 
+            return false;
+        
+        //Corremos un lugar a la izquierda de los usuarios
+        for (int i = indice; i < cantidad - 1; i++) {   //si se encuentra, desplazamos los usuarios en el array y ajustamos la matriz de adyacencia
+            usuarios[i] = usuarios[i + 1];
+        }
+        //Corregimos el largo y la cantidad de usuarios
+        usuarios[cantidad - 1] = null;
+
+        //Ajustamos la columna afectada
+        for (int i = 0; i < cantidad; i++) {  //siguiendo la misma logica, que los arrays
+            for (int j = indice; j < cantidad; j++) {
+                matriz[i][j] = matriz[i][j + 1];
+            }
+        }
+
+        //Ajustamos la fila afectada
+        for (int j = 0; j < cantidad; j++) {
+            for (int i = indice; i < cantidad; i++) {
+                matriz[i][j] = matriz[i + 1][j];
+            }
+        }
+
+        cantidad--;
+        return true;
+    }
     public void seguir(int idSeguidor, int idSeguido) {   ///aca manejamos la logica de relaciones en la matriz  
         int i = obtenerIndice(idSeguidor);                  // buscamos los id de los usuarios, si alguno es -1 sale del metodo, dado que uno de los dos no existe,
         int j = obtenerIndice(idSeguido);                  //si ambos indices son encontrados, vamos a buscar la interaeccion de los dos en la matris y hacrmos que au valor sea true

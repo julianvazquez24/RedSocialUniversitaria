@@ -1,4 +1,4 @@
-package esctructuras.usuarios;
+package estructuras.usuarios;
 
 import modelos.Usuario;
 
@@ -35,18 +35,30 @@ public class GrafoUsuarios {
     }
 
 
-    //Falta ver ver estooooooooooooooooooooooo puto el que lee
+    //en este caso eliminamos del array usuarios y de la matriz para que no
+    //existan diferencias en ambos, se maneja la persistencia de datos..
     public boolean eliminarUsuario(int idUsuario) {   //logica para eliminar usuario, buscamos su indice en el array, si no se encuentra retornamos false
         int indice = obtenerIndice(idUsuario);
         if (indice == -1) 
             return false;
         
-        //Corremos un lugar a la izquierda de los usuarios
+        //corremos un lugar a la izquierda de los usuarios
         for (int i = indice; i < cantidad - 1; i++) {   //si se encuentra, desplazamos los usuarios en el array y ajustamos la matriz de adyacencia
             usuarios[i] = usuarios[i + 1];
         }
-        //Corregimos el largo y la cantidad de usuarios
+        //corregimos el largo y la cantidad de usuarios
         usuarios[cantidad - 1] = null;
+
+        //Ajusttamos la matriz, en esta caso la fila
+        for (int i = indice; i < cantidad - 1; i++) {
+            for (int j = 0; j < cantidad; j++) {
+                matriz[i][j] = matriz[i + 1][j];
+            }
+        }
+         // limpiar la última fila
+        for (int j = 0; j < cantidad; j++) {
+            matriz[cantidad - 1][j] = false;
+        }
 
         //Ajustamos la columna afectada
         for (int i = 0; i < cantidad; i++) {  //siguiendo la misma logica, que los arrays
@@ -55,16 +67,10 @@ public class GrafoUsuarios {
             }
         }
 
-        //Ajustamos la fila afectada
-        for (int j = 0; j < cantidad; j++) {
-            for (int i = indice; i < cantidad; i++) {
-                matriz[i][j] = matriz[i + 1][j];
-            }
-        }
-
         cantidad--;
         return true;
     }
+   
     public void seguir(int idSeguidor, int idSeguido) {   ///aca manejamos la logica de relaciones en la matriz  
         int i = obtenerIndice(idSeguidor);                  // buscamos los id de los usuarios, si alguno es -1 sale del metodo, dado que uno de los dos no existe,
         int j = obtenerIndice(idSeguido);                  //si ambos indices son encontrados, vamos a buscar la interaeccion de los dos en la matris y hacrmos que au valor sea true
@@ -133,14 +139,15 @@ public class GrafoUsuarios {
         return seguidoresUsuario;
     }
 
-    public Usuario[] amigosEnComun(int idSeguidorA, int idSeguidorB) {   
+    public Usuario[] amigosEnComun(int idSeguidorA, int idSeguidorB) {
 
         int iA = obtenerIndice(idSeguidorA);
         int iB = obtenerIndice(idSeguidorB);
 
-        if (iA == -1 || iB == -1)
+        if (iA == -1 || iB == -1) {
             return new Usuario[0];
-
+        }
+    
         int contador = 0;
 
         for (int p = 0; p < cantidad; p++) {      //Primero buscamos los casos donde coincidan ambos en true, para piosterior asignarle el largo al nuevoArray amigos en comun

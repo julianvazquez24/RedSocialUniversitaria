@@ -4,9 +4,13 @@ import org.glassfish.grizzly.http.server.HttpServer;    //esto es lo que va a le
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory; //esto es lo que va a integrar jersey con grizzly
 import org.glassfish.jersey.server.ResourceConfig; //esto es para configurar los recursos de jersey, es decir, le pasamos la conntroller y mapeamos los endpoints
 
+import redSocial.RedSocial;
+
 import java.net.URI;
 
 public class App {
+
+    public static RedSocial red = new RedSocial();
 
     public static void main(String[] args) {
  

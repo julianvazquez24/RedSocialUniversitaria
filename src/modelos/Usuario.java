@@ -1,65 +1,81 @@
 package modelos;
+
 import java.util.Date;
+import estructuras.notificaciones.ColaNotificacion;
 
 public class Usuario {
-    public int Id;
-    public String Nombre;
-    public String Email;
-    public String Genero;
-    public String Nacionalidad;
-    public Date FechaRegistro;
+    private int id;
+    private String nombre;
+    private String email;
+    private String genero;
+    private String nacionalidad;
+    private Date fechaRegistro;
+
+    private ColaNotificacion colaNotificaciones;
+
 
     public Usuario(int id, String nombre, String email, String genero, String nacionalidad, Date fechaRegistro) {
-        this.Id = id;
-        this.Nombre = nombre;
-        this.Email = email;
-        this.Genero = genero;
-        this.Nacionalidad = nacionalidad;
-        this.FechaRegistro = fechaRegistro;
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.genero = genero;
+        this.nacionalidad = nacionalidad;
+        this.fechaRegistro = fechaRegistro;
+        this.colaNotificaciones = new ColaNotificacion();
+
     }
 
-    public Usuario() {    }
+    public Usuario() {
+        this.colaNotificaciones = new ColaNotificacion();
+
+    }
     // aca vamos a hacer los getters y setters para traer info luego y no hacerlo en otras clases o controllers
 
     // getters
     public int getId() {
-        return Id;
+        return id;
     }
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
     public String getEmail() {
-        return Email;
+        return email;
     }
     public String getGenero() {
-        return Genero;
+        return genero;
     }
     public String getNacionalidad() {
-        return Nacionalidad;
+        return nacionalidad;
     }
+
     public Date getFechaRegistro() {
-        return FechaRegistro;
+        return fechaRegistro;
     }
+
+    public ColaNotificacion getColaNotificaciones() {
+        return colaNotificaciones;
+    }
+
 
     
     // setters
     public void setId(int id) {
-        this.Id = id;
+        this.id = id;
     }
     public void setNombre(String nombre) {
-        this.Nombre = nombre;
+        this.nombre = nombre;
     }
     public void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
     public void setGenero(String genero) {
-        this.Genero = genero;
+        this.genero = genero;
     }
     public void setNacionalidad(String nacionalidad) {
-        this.Nacionalidad = nacionalidad;
+        this.nacionalidad = nacionalidad;
     }
     public void setFechaRegistro(Date fechaRegistro) {
-        this.FechaRegistro = fechaRegistro;
+        this.fechaRegistro = fechaRegistro;
     }
 
 

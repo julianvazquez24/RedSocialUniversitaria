@@ -1,4 +1,4 @@
-package esctructuras;
+package estructuras;
 
 public class funcionesUtiles {
 

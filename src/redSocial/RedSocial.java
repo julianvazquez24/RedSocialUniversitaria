@@ -11,6 +11,8 @@ import modelos.Usuario;
 import modelos.Comentario;
 import modelos.Notificacion;
 import modelos.Publicacion;
+import modelos.*;
+
 
 import java.util.Date;
 
@@ -26,6 +28,7 @@ public class RedSocial {
         this.cantidadUsuarios = 0;
 
         this.grafo = new GrafoUsuarios(100);
+        this.mapaPublicacion = new mapaPublicacion(101);
     }
 
     private int generarIdNotificacion() {
@@ -108,8 +111,8 @@ public class RedSocial {
                     "Nuevo Seguidor",
                     seguidor.getNombre() + " comenzo a seguirte",
                     new Date(),
-                    seguidor
-            //publicacion: null       
+                    seguidor,
+                    null       
             );
             seguido.getColaNotificaciones().ponerEnLaCola(nuevaNotificacion);
             return ("Agregado el usuario " + idSeguido + " Correctamente ");
@@ -151,14 +154,15 @@ public class RedSocial {
     }
 
     public Publicacion crearPublicacion(int idUsuario, String contenido) {
-        Usuario idAutor = buscarUsuario(idUsuario);
+        Usuario autor = buscarUsuario(idUsuario);
+        String nombreAutor = autor.getNombre()
 
-        if (idAutor == null) {
+        if (autor == null) {
             return null;
         }
 
         int idPub = generarIdPublicacion();
-        Publicacion publicacion = new Publicacion(idPub, idAutor, contenido, new Date());
+        Publicacion publicacion = new Publicacion(idPub, nombreAutor, contenido, new Date());
 
         mapaPublicacion.agregarPublicacion(publicacion);
 

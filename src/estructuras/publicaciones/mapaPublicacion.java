@@ -1,4 +1,6 @@
 package estructuras.publicaciones;
+//Optamos por utilizar listas enlazada, dado que nunca vamos a saber largo que va a tener, por ende en este caso
+//seguimos direccionando el puntero o otro o le asignamos null, controlando asi su escalabilidad
 
 import modelos.Publicacion;
 

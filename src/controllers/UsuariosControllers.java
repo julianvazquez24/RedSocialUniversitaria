@@ -1,11 +1,10 @@
 package controllers;
+import modelos.Notificacion;
 import modelos.Usuario;
 import servicio.usuarioService;
 import static app.App.red;
 
-import java.util.Date;
 
-import estructuras.usuarios.GrafoUsuarios;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -22,7 +21,6 @@ import jakarta.ws.rs.Produces;
 public class UsuariosControllers {
     
     private usuarioService usuarioService = new usuarioService();
-    private GrafoUsuarios grafo;
 
 
     @POST
@@ -141,5 +139,16 @@ public class UsuariosControllers {
         return amigosEnComun;
     }
                                         
-                                    
+    @GET
+    @Path("/{id}/notificaciones")
+    public Notificacion[] notificaciones(@PathParam("id") int id) {
+        Notificacion[] notificaciones = red.obtenerNotificaciones(id);
+
+        if (notificaciones == null) {
+            return new Notificacion[0];
+        }
+
+        return notificaciones;
+
+    }                                
 }

@@ -8,15 +8,15 @@ public class Notificacion {
     private String mensaje;
     private Date fecha;
     private Usuario origen;
-    //private Publicacion publicacion;   // puede ser null
+    private Publicacion publicacion;   // puede ser null
 
-    public Notificacion(int id, String tipo, String mensaje, Date fecha, Usuario origen) {
+    public Notificacion(int id, String tipo, String mensaje, Date fecha, Usuario origen, Publicacion publicacion) {
         this.id = id;
         this.tipo = tipo;
         this.mensaje = mensaje;
         this.fecha = fecha;
         this.origen = origen;
-     //   this.publicacion = publicacion;
+        this.publicacion = publicacion;
     }
 
     public int getId() { return id; }
@@ -24,5 +24,5 @@ public class Notificacion {
     public String getMensaje() { return mensaje; }
     public Date getFecha() { return fecha; }
     public Usuario getOrigen() { return origen; }
-   // public Publicacion getPublicacion() { return publicacion; }
+    public Publicacion getPublicacion() { return publicacion; }
 }

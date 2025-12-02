@@ -13,39 +13,38 @@ import modelos.Publicacion;
 import static app.App.red;
 
 @Path("/publicacion")
-@Produces(MediaType.APPLICATION_JSON) //Indica que lo que retorna lo transforma a JSON
-@Consumes(MediaType.APPLICATION_JSON) //Indica que recibe peticiones de tipo JSON
-public class PublicacionController {    
-          
+@Produces(MediaType.APPLICATION_JSON) // Indica que lo que retorna lo transforma a JSON
+@Consumes(MediaType.APPLICATION_JSON) // Indica que recibe peticiones de tipo JSON
+public class PublicacionController {
+
     @POST
     @Path("/crear/{idUsuario}/{contenido}")
-    public Publicacion crearPublicacion(  @PathParam("idUsuario") int idUsuario,
-                                        @PathParam("contenido") String contenido) {
-            
-                if (contenido == null || contenido.isEmpty()) {
-                    return null; // O lanzar una excepción según el manejo de errores que prefieras
-                }
-                
-                Publicacion nuevaPublicacion = red.crearPublicacion(idUsuario, contenido);
+    public Publicacion crearPublicacion(@PathParam("idUsuario") int idUsuario,
+            @PathParam("contenido") String contenido) {
 
-                return nuevaPublicacion;
+        if (contenido == null || contenido.isEmpty()) {
+            return null; // O lanzar una excepción según el manejo de errores que prefieras
+        }
+
+        Publicacion nuevaPublicacion = red.crearPublicacion(idUsuario, contenido);
+
+        return nuevaPublicacion;
     }
 
-
-    //habria que validar los datos devuelto
+    // habria que validar los datos devuelto
     @GET
     @Path("/{idPub}")
-    public Publicacion obtenerPublicacion(@PathParam("idPub") int idPub){
+    public Publicacion obtenerPublicacion(@PathParam("idPub") int idPub) {
         Publicacion publicacion = red.obtenerPublicacion(idPub);
-        
+
         return publicacion;
     }
 
     @POST
     @Path("/{idPub}/{texto}/{idUsuario}")
-    public Comentario comentar( @PathParam("idPub") int idPub,
-                                @PathParam("idUsuario") int idUsuario,
-                                @PathParam("texto") String texto){
+    public Comentario comentar(@PathParam("idPub") int idPub,
+            @PathParam("idUsuario") int idUsuario,
+            @PathParam("texto") String texto) {
         if (texto == null || texto.isBlank()) {
             return null;
         }
@@ -58,9 +57,14 @@ public class PublicacionController {
 
     @GET
     @Path("/comentarios/{idPub}")
-    public 
 
+    public Comentario[] obtenerComentarios(@PathParam("idPub") int idPub) {
+        Publicacion publicacion = red.obtenerPublicacion(idPub);
+        if (publicacion == null) {
+            return new Comentario[0];
+        }
 
-
+        return publicacion.getComentarios().listaComentarios();
+    }
 
 }

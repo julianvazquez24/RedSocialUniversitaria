@@ -6,14 +6,14 @@ import java.util.Date;
 
 public class Publicacion {
     private int id;
-    private String autor;
+    private Usuario autor;
     private String contenido;
     private Date fecha;
     private ListaComentario comentarios;
 
     public Publicacion(int id, Usuario autor, String contenido, Date fecha) {
         this.id = id;
-        this.autor = autor.getNombre();
+        this.autor = autor;
         this.contenido = contenido;
         this.fecha = fecha;
         this.comentarios = new ListaComentario();

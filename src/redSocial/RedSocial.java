@@ -155,14 +155,13 @@ public class RedSocial {
 
     public Publicacion crearPublicacion(int idUsuario, String contenido) {
         Usuario autor = buscarUsuario(idUsuario);
-        String nombreAutor = autor.getNombre()
 
         if (autor == null) {
             return null;
         }
 
         int idPub = generarIdPublicacion();
-        Publicacion publicacion = new Publicacion(idPub, nombreAutor, contenido, new Date());
+        Publicacion publicacion = new Publicacion(idPub, autor, contenido, new Date());
 
         mapaPublicacion.agregarPublicacion(publicacion);
 

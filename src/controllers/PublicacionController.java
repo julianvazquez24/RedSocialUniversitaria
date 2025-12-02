@@ -1,11 +1,14 @@
 package controllers;
 
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.MediaType;
+import modelos.Comentario;
 import modelos.Publicacion;
 import static app.App.red;
 
@@ -28,5 +31,36 @@ public class PublicacionController {
                 return nuevaPublicacion;
     }
 
-    
+
+    //habria que validar los datos devuelto
+    @GET
+    @Path("/{idPub}")
+    public Publicacion obtenerPublicacion(@PathParam("idPub") int idPub){
+        Publicacion publicacion = red.obtenerPublicacion(idPub);
+        
+        return publicacion;
+    }
+
+    @POST
+    @Path("/{idPub}/{texto}/{idUsuario}")
+    public Comentario comentar( @PathParam("idPub") int idPub,
+                                @PathParam("idUsuario") int idUsuario,
+                                @PathParam("texto") String texto){
+        if (texto == null || texto.isBlank()) {
+            return null;
+        }
+
+        Comentario comentar = red.comentarPublicacion(idUsuario, idPub, texto);
+
+        return comentar;
+
+    }
+
+    @GET
+    @Path("/comentarios/{idPub}")
+    public 
+
+
+
+
 }

@@ -184,4 +184,76 @@ public class GrafoUsuarios {
         return amigosEnComun;
     }
 
+    public Usuario[] recomendarAmigosDeAmigos(int idUsuario){
+
+        // videos que utilizamos para comprender el bfs, ya que a simple vista no lograbamos comprenderlo 
+        // https://www.youtube.com/watch?v=_Yf8tneauJ8
+        // https://www.youtube.com/watch?v=FXaUUYqTtY8
+
+        // al nosotros tener una matriz de adyacencia y realizar el metodo de recorrida de bfs, el costo de este metodo 
+        // va a ser O(V^2). dado que en el peor de los casos, vamos a tener que recorrer 
+        //toda la matriz para encontrar las recomendaciones
+
+        // neceitamos un array en el que marquemos los nodos que ya visitamos a medida que vamos recorriendo
+        // necesitamos una cola para ir guardando los nodos que vamos a visitar
+        // y necesitamos un array para guardar las recomendaciones que encontramos 
+        // ademas vamos a tener que llevar un control sobre los niveles xq si no limitamos el bfs a nivel 2 que serian los amigos
+        // de amigos, vamos a seguir acumulamdo recomendaciones a niveles posteriores
+     
+        int usuarioInicial = obtenerIndice(idUsuario);
+        if (usuarioInicial == -1){
+            return new Usuario[0];
+        }
+
+        boolean[] visitado = new boolean[cantidad]; // array para marcar los nodos visitados en la matriz
+
+        int[] nivel = new int[cantidad];  // si el nivel es -1 quiere decir que no fue visitado 
+        for ( int i = 0; i < nivel.length ; i++){
+            nivel[i] = -1;
+        }
+
+        ColaUsuarios cola = new ColaUsuarios(cantidad);
+        Usuario[] recomendacionesAmigos = new Usuario[cantidad];
+        int cantidadRecomendaciones = 0;
+
+        // arrancamos con el nodo inicial, es decir el usuario al que vamos a buscarle las recomendaciones
+        visitado[usuarioInicial] = true;
+        nivel[usuarioInicial] = 0;
+        cola.encolar(usuarioInicial);
+
+        // ARRRANCAMOS A RECORRER CON EL BFS SIN IRNOS DE NIVEL DOS
+
+        while (cola.estaVacia() == false ){
+
+            int actual = cola.desencolar();
+
+            // si ya estoy en el nivel dos no sigo recorriendo
+            if(nivel[actual] < 2){
+
+                for( int j = 0; j < cantidad; j++){
+
+                    if(matriz[actual][j] == true && visitado[j] == false){
+                        visitado[j] = true;
+                        nivel[j] = nivel[actual] + 1;
+                        cola.encolar(j);
+
+                        if( nivel[j] == 2 && matriz[usuarioInicial][j] == false && j != usuarioInicial){
+                            recomendacionesAmigos[cantidadRecomendaciones] = usuarios[j];
+                            cantidadRecomendaciones++;
+                        }
+                    }
+                    
+                }
+            }
+
+        }
+
+        Usuario[] recomendacionesFinales = new Usuario[cantidadRecomendaciones];
+        for(int i = 0; i < cantidadRecomendaciones; i++){
+            recomendacionesFinales[i] = recomendacionesAmigos[i];
+        }
+
+        return recomendacionesFinales;
+    }
+    
 }

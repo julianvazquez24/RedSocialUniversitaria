@@ -143,6 +143,11 @@ public class RedSocial {
         return grafo.amigosEnComun(UsuarioA, usuarioB);
     }
 
+    public Usuario[] recomendarAmigosDeAmigos(int idUsuario){
+        return grafo.recomendarAmigosDeAmigos(idUsuario);
+    }
+    
+
     public Notificacion[] obtenerNotificaciones(int idUsuario) {
         Usuario usuario = buscarUsuario(idUsuario);
 

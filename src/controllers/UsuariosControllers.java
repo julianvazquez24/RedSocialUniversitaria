@@ -138,6 +138,18 @@ public class UsuariosControllers {
 
         return amigosEnComun;
     }
+
+    @GET
+    @Path("/recomendarAmigos/{id}")   // recomendaion de amigos a partir de los amigos de mis amigos.
+    public Usuario[] recomendarAmigos(@PathParam("id") int idUsuario) {
+        Usuario[] recomendaciones = red.recomendarAmigosDeAmigos(idUsuario);
+
+        if (recomendaciones == null) {
+            return new Usuario[0];
+        }
+
+        return recomendaciones;
+    }
                                         
     @GET
     @Path("/{id}/notificaciones")

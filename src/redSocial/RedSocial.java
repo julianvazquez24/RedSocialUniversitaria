@@ -11,7 +11,7 @@ import modelos.Usuario;
 import modelos.Comentario;
 import modelos.Notificacion;
 import modelos.Publicacion;
-import modelos.*;
+
 
 
 import java.util.Date;
@@ -214,5 +214,99 @@ public class RedSocial {
         return comentario;
 
     }
+
+    public Usuario[] cantidadDeUsuarios(Date fechaI, Date fechaF){       
+        int contador = 0;
+
+        for( int i = 0; i < cantidadUsuarios; i++){
+            Date fechaRegistro = usuarios[i].getFechaRegistro();
+            if(fechaRegistro.compareTo(fechaI) >= 0 && fechaRegistro.compareTo(fechaF) <= 0){
+                contador++;
+
+            }
+        }
+
+        Usuario[] listaFinal = new Usuario[contador];
+        int contadorFinal = 0;
+        for( int i = 0; i < cantidadUsuarios; i++){
+            Date fechaRegistro = usuarios[i].getFechaRegistro();
+            if(fechaRegistro.compareTo(fechaI) >= 0 && fechaRegistro.compareTo(fechaF) <= 0){
+                listaFinal[contadorFinal] = usuarios[i];
+                contadorFinal++;
+            }
+        } 
+        
+        return listaFinal;
+    }
+
+       public void cargarUsuariosDemo() {
+        if (cantidadUsuarios > 0)
+            return; // evitar recargar
+
+        // ==== 1) CREACIÓN DE USUARIOS ====
+    Usuario u1 = new Usuario(1, "Ana", "ana@mail.com", "F", "Uruguay",
+        new Date(2023 - 1900, 0, 15));   // 15/01/2023
+
+    Usuario u2 = new Usuario(2, "Luis", "luis@mail.com", "M", "Argentina",
+            new Date(2023 - 1900, 5, 10));   // 10/06/2023
+
+    Usuario u3 = new Usuario(3, "Pedro", "pedro@mail.com", "M", "Chile",
+            new Date(2024 - 1900, 2, 5));    // 05/03/2024
+
+    Usuario u4 = new Usuario(4, "María", "maria@mail.com", "F", "Perú",
+            new Date(2024 - 1900, 8, 20));   // 20/09/2024
+
+    Usuario u5 = new Usuario(5, "Lucía", "lucia@mail.com", "F", "México",
+            new Date(2025 - 1900, 1, 28));   // 28/02/2025
+
+        registrarUsuario(u1);
+        registrarUsuario(u2);
+        registrarUsuario(u3);
+        registrarUsuario(u4);
+        registrarUsuario(u5);
+
+        // ==== 2) RELACIONES (FOLLOW / GRAFO DIRIGIDO) ====
+        // Ana sigue a Luis y Pedro (nivel 1)
+        seguirUsuario(1, 2);
+        seguirUsuario(1, 3);
+
+        // Para generar “amigos de amigos”
+        seguirUsuario(2, 4); // Luis -> María
+        seguirUsuario(3, 4); // Pedro -> María
+        seguirUsuario(3, 5); // Pedro -> Lucía
+
+        // Más conexiones
+        seguirUsuario(4, 5); // María -> Lucía
+
+        // ==== 3) PUBLICACIONES DE DEMO ====
+        // Usamos los IDs fijos que acabamos de cargar
+        Publicacion p1 = crearPublicacion(1, "Hola, soy Ana, probando la red social 😄");
+        Publicacion p2 = crearPublicacion(2, "Buen día, acá Luis programando en Java.");
+        Publicacion p3 = crearPublicacion(3, "Hoy estuve estudiando grafos dirigidos.");
+        Publicacion p4 = crearPublicacion(4, "Hermoso día para tomar unos mates y codear.");
+        Publicacion p5 = crearPublicacion(5, "Lucía saluda a todos desde México 🌎");
+
+        // ==== 4) COMENTARIOS DE DEMO (listas enlazadas + notificaciones) ====
+        // Comentarios a la publicación de Ana
+        if (p1 != null) {
+            comentarPublicacion(2, p1.getId(), "Bienvenida Ana!");
+            comentarPublicacion(3, p1.getId(), "Hola Ana, ya te sigo 😁");
+        }
+
+        // Comentarios a la publicación de Pedro (grafos)
+        if (p3 != null) {
+            comentarPublicacion(1, p3.getId(), "Los grafos me están matando 😂");
+            comentarPublicacion(4, p3.getId(), "A mí también, pero están buenos.");
+        }
+
+        // Comentarios a la publicación de Lucía
+        if (p5 != null) {
+            comentarPublicacion(1, p5.getId(), "¡Saludos desde Uruguay!");
+            comentarPublicacion(2, p5.getId(), "Qué bueno, Lucía 😎");
+        }
+
+        System.out.println("Usuarios, relaciones, publicaciones y comentarios de prueba creados correctamente.");
+    }
+
 }
 

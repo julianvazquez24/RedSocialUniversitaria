@@ -6,9 +6,9 @@ package estructuras.publicaciones;
 
 import modelos.Publicacion;
 
-class listaPublicaciones {
+public class listaPublicaciones {
 
-    private NodoPublicacion cabeza;
+    public NodoPublicacion cabeza;
     
     public listaPublicaciones() {
         cabeza = null;

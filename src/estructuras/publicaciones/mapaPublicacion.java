@@ -5,7 +5,7 @@ package estructuras.publicaciones;
 import modelos.Publicacion;
 
 public class mapaPublicacion {
-    private listaPublicaciones[] almacenamientoPublicaciones;
+    public listaPublicaciones[] almacenamientoPublicaciones;
     private int capacidad;
 
     public mapaPublicacion(int capacidad) {

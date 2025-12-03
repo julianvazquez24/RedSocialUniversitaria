@@ -5,14 +5,14 @@ es la base de esta red social universitaria  */
 
 
 package redSocial;
-import estructuras.publicaciones.mapaPublicacion;
+import estructuras.publicaciones.*;
 import estructuras.usuarios.*;
 import modelos.Usuario;
 import modelos.Comentario;
 import modelos.Notificacion;
 import modelos.Publicacion;
 
-
+import static app.App.red;
 
 import java.util.Date;
 
@@ -159,6 +159,7 @@ public class RedSocial {
     }
 
     public Publicacion crearPublicacion(int idUsuario, String contenido) {
+        
         Usuario autor = buscarUsuario(idUsuario);
 
         if (autor == null) {
@@ -171,6 +172,7 @@ public class RedSocial {
         mapaPublicacion.agregarPublicacion(publicacion);
 
         return publicacion;
+
     }
 
     public Publicacion obtenerPublicacion(int idPublicacion) {
@@ -235,28 +237,120 @@ public class RedSocial {
                 contadorFinal++;
             }
         } 
+
+        for (int i = 0; i < listaFinal.length; i++) {
+            for (int j = i + 1; j < listaFinal.length; j++) {
+                if (listaFinal[i].getFechaRegistro().compareTo(listaFinal[j].getFechaRegistro()) > 0) {
+                    Usuario temp = listaFinal[i];
+                    listaFinal[i] = listaFinal[j];
+                    listaFinal[j] = temp;
+                }
+            }
+        }
         
         return listaFinal;
     }
 
-       public void cargarUsuariosDemo() {
+    public Usuario[] filtroPorGeneroYNacionalidad(String genero, String nacionalidad){
+
+        int contador = 0;
+
+        for(int i=0; i < cantidadUsuarios; i++){
+            String generoUsuario = usuarios[i].getGenero();
+            String nacionalidadUsuario = usuarios[i].getNacionalidad();
+
+            if (generoUsuario.equals(genero) && nacionalidadUsuario.equals(nacionalidad)){
+                contador++; 
+            }
+        }
+
+        Usuario[] listaFinal = new Usuario[contador];
+        int contadorFinal = 0;
+        for (int i=0; i< cantidadUsuarios; i++){
+            
+            String generoUsuario = usuarios[i].getGenero();
+            String nacionalidadUsuario = usuarios[i].getNacionalidad();
+            if (generoUsuario.equals(genero) && nacionalidadUsuario.equals(nacionalidad)){
+                listaFinal[contadorFinal] = usuarios[i];
+                contadorFinal++;
+            }
+        }
+
+        return listaFinal;
+    }
+
+    public Publicacion[] top10Publicaciones() {
+
+        // accedemos al array de las publicaciones
+        listaPublicaciones[] arr = red.mapaPublicacion.almacenamientoPublicaciones;
+
+        // contamos cuantos hay 
+        int total = 0;
+        for (int i = 0; i < arr.length; i++) {
+            NodoPublicacion actual = arr[i].cabeza;
+            while (actual != null) {
+                total++;
+                actual = actual.siguientePublicacion;
+            }
+        }
+
+        Publicacion[] publicaciones = new Publicacion[total];
+        int pos = 0;
+
+        // pasamos todas las publicaciones al array, para posteriormetne iterar aplicando bubble sort
+        for (int i = 0; i < arr.length; i++) {
+            NodoPublicacion actual = arr[i].cabeza;
+            while (actual != null) {
+                publicaciones[pos] = actual.dato;
+                pos++;
+                actual = actual.siguientePublicacion;
+            }
+        }
+
+        for (int i = 0; i < publicaciones.length; i++) {
+            for (int j = 0; j < publicaciones.length - 1; j++) {
+
+                int c1 = publicaciones[j].getComentarios().getCantidad();
+                int c2 = publicaciones[j + 1].getComentarios().getCantidad();
+
+                if (c1 < c2) {
+                    Publicacion aux = publicaciones[j];
+                    publicaciones[j] = publicaciones[j + 1];
+                    publicaciones[j + 1] = aux;
+                }
+            }
+        }
+
+        //limitamos hasta maximo 10, si es menos que traiga el total que tiene el array
+        int limite = publicaciones.length < 10 ? publicaciones.length : 10;
+
+        Publicacion[] top = new Publicacion[limite];
+
+        for (int i = 0; i < limite; i++) {
+            top[i] = publicaciones[i];
+        }
+
+        return top;
+    }
+
+    public void cargarUsuariosDemo() {
         if (cantidadUsuarios > 0)
-            return; // evitar recargar
+            return; //evitamos precarga
 
-        // ==== 1) CREACIÓN DE USUARIOS ====
-    Usuario u1 = new Usuario(1, "Ana", "ana@mail.com", "F", "Uruguay",
-        new Date(2023 - 1900, 0, 15));   // 15/01/2023
+        
+        Usuario u1 = new Usuario(1, "Ana", "ana@mail.com", "F", "Uruguay",
+            new Date(2023 - 1900, 0, 15));   // 15/01/2023
 
-    Usuario u2 = new Usuario(2, "Luis", "luis@mail.com", "M", "Argentina",
+        Usuario u2 = new Usuario(2, "Luis", "luis@mail.com", "M", "Argentina",
             new Date(2023 - 1900, 5, 10));   // 10/06/2023
 
-    Usuario u3 = new Usuario(3, "Pedro", "pedro@mail.com", "M", "Chile",
+        Usuario u3 = new Usuario(3, "Pedro", "pedro@mail.com", "M", "Chile",
             new Date(2024 - 1900, 2, 5));    // 05/03/2024
 
-    Usuario u4 = new Usuario(4, "María", "maria@mail.com", "F", "Perú",
+        Usuario u4 = new Usuario(4, "María", "maria@mail.com", "F", "Uruguay",
             new Date(2024 - 1900, 8, 20));   // 20/09/2024
 
-    Usuario u5 = new Usuario(5, "Lucía", "lucia@mail.com", "F", "México",
+        Usuario u5 = new Usuario(5, "Lucía", "lucia@mail.com", "F", "México",
             new Date(2025 - 1900, 1, 28));   // 28/02/2025
 
         registrarUsuario(u1);
@@ -265,44 +359,36 @@ public class RedSocial {
         registrarUsuario(u4);
         registrarUsuario(u5);
 
-        // ==== 2) RELACIONES (FOLLOW / GRAFO DIRIGIDO) ====
-        // Ana sigue a Luis y Pedro (nivel 1)
+         
         seguirUsuario(1, 2);
         seguirUsuario(1, 3);
 
-        // Para generar “amigos de amigos”
-        seguirUsuario(2, 4); // Luis -> María
+         seguirUsuario(2, 4); // Luis -> María
         seguirUsuario(3, 4); // Pedro -> María
         seguirUsuario(3, 5); // Pedro -> Lucía
 
-        // Más conexiones
-        seguirUsuario(4, 5); // María -> Lucía
+         seguirUsuario(4, 5); // María -> Lucía
 
-        // ==== 3) PUBLICACIONES DE DEMO ====
-        // Usamos los IDs fijos que acabamos de cargar
+         
         Publicacion p1 = crearPublicacion(1, "Hola, soy Ana, probando la red social 😄");
         Publicacion p2 = crearPublicacion(2, "Buen día, acá Luis programando en Java.");
         Publicacion p3 = crearPublicacion(3, "Hoy estuve estudiando grafos dirigidos.");
         Publicacion p4 = crearPublicacion(4, "Hermoso día para tomar unos mates y codear.");
         Publicacion p5 = crearPublicacion(5, "Lucía saluda a todos desde México 🌎");
-
-        // ==== 4) COMENTARIOS DE DEMO (listas enlazadas + notificaciones) ====
-        // Comentarios a la publicación de Ana
+ 
         if (p1 != null) {
-            comentarPublicacion(2, p1.getId(), "Bienvenida Ana!");
+            comentarPublicacion(2, p2.getId(), "Bienvenida Ana!");
             comentarPublicacion(3, p1.getId(), "Hola Ana, ya te sigo 😁");
         }
 
-        // Comentarios a la publicación de Pedro (grafos)
-        if (p3 != null) {
+         if (p3 != null) {
             comentarPublicacion(1, p3.getId(), "Los grafos me están matando 😂");
-            comentarPublicacion(4, p3.getId(), "A mí también, pero están buenos.");
+            comentarPublicacion(4, p2.getId(), "A mí también, pero están buenos.");
         }
 
-        // Comentarios a la publicación de Lucía
-        if (p5 != null) {
-            comentarPublicacion(1, p5.getId(), "¡Saludos desde Uruguay!");
-            comentarPublicacion(2, p5.getId(), "Qué bueno, Lucía 😎");
+         if (p5 != null) {
+            comentarPublicacion(1, p2.getId(), "¡Saludos desde Uruguay!");
+            comentarPublicacion(2, p2.getId(), "Qué bueno, Lucía 😎");
         }
 
         System.out.println("Usuarios, relaciones, publicaciones y comentarios de prueba creados correctamente.");

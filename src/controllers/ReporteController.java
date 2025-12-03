@@ -4,6 +4,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import modelos.Publicacion;
 import modelos.Usuario;
 import jakarta.ws.rs.PathParam;
 
@@ -37,6 +38,17 @@ public class ReporteController {
 
 
     @GET
+    @Path("/usuariosporGeneroYNacionalidad/{genero}/{nacionalidad}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Usuario[] usuarioPorGeneroNacionalidad(@PathParam("genero") String genero,
+                                                 @PathParam("nacionalidad") String nacionalidad){
+                        
+     return red.filtroPorGeneroYNacionalidad(genero,nacionalidad);
+                                                
+    }
+
+
+    @GET
     @Path("/cargar")
     @Produces(MediaType.TEXT_PLAIN)
     public String cargarDatosDemo() {
@@ -45,4 +57,12 @@ public class ReporteController {
 
         return "Datos de usuarios y relaciones cargados correctamente.";
     }
+
+    @GET
+    @Path("/top10publicaciones")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Publicacion[] topPublicaciones() {
+        return red.top10Publicaciones();
+    }
 }
+

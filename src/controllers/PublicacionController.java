@@ -30,10 +30,14 @@ public class PublicacionController {
         return nuevaPublicacion;
     }
 
-    // habria que validar los datos devuelto
     @GET
     @Path("/{idPub}")
     public Publicacion obtenerPublicacion(@PathParam("idPub") int idPub) {
+
+        if (idPub < 0) {
+            return null;
+        }
+
         Publicacion publicacion = red.obtenerPublicacion(idPub);
 
         return publicacion;
@@ -44,7 +48,8 @@ public class PublicacionController {
     public Comentario comentar(@PathParam("idPub") int idPub,
             @PathParam("idUsuario") int idUsuario,
             @PathParam("texto") String texto) {
-        if (texto == null || texto.isBlank()) {
+        
+        if (texto == null || texto.isBlank() || idPub < 0 || idUsuario < 0) {
             return null;
         }
 
@@ -56,10 +61,10 @@ public class PublicacionController {
 
     @GET
     @Path("/comentarios/{idPub}")
-
     public Comentario[] obtenerComentarios(@PathParam("idPub") int idPub) {
         Publicacion publicacion = red.obtenerPublicacion(idPub);
-        if (publicacion == null) {
+
+        if (publicacion == null || idPub < 0) {
             return new Comentario[0];
         }
 

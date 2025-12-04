@@ -22,6 +22,11 @@ public class ReporteController {
     public Usuario[] usuariosPorFecha(@PathParam("fechaI") String fechaI,
                                     @PathParam("fechaF") String fechaF) {
 
+
+        if (fechaI == null || fechaI.isBlank() || fechaF == null || fechaF.isBlank()) {
+            return new Usuario[0];
+        }
+
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
         try { //utilizamos este try dado que neceistabamos manejar un excepction en caso de que no pueda hacer la conversion, lo
@@ -42,8 +47,11 @@ public class ReporteController {
     @Produces(MediaType.APPLICATION_JSON)
     public Usuario[] usuarioPorGeneroNacionalidad(@PathParam("genero") String genero,
                                                  @PathParam("nacionalidad") String nacionalidad){
-                        
-     return red.filtroPorGeneroYNacionalidad(genero,nacionalidad);
+         
+        if (genero == null || genero.isBlank() || nacionalidad == null || nacionalidad.isBlank()) {
+            return new Usuario[0];
+        }
+        return red.filtroPorGeneroYNacionalidad(genero,nacionalidad);
                                                 
     }
 
@@ -76,6 +84,11 @@ public class ReporteController {
     @Path("/nivelPopularidad/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String nivelPopularidad(@PathParam("id") int id) {
+        
+        if (id <= 0) {
+            return "ID inválido";
+        }
+        
         return red.rankingDePopularidad(id);
     }
 }

@@ -33,12 +33,11 @@ Crear Usuario
 POST /usuarios/crear
 
 Body JSON obligatorio:
-
-
+*Para identificar el genero utilizamos las siglas masculino (M) y el feminino (F). 
 {
   "nombre": "juli",
   "email": "juli@gmail.com",
-  "genero": "hombre",
+  "genero": "M", //O "F" 
   "nacionalidad": "uruguay"
 }
 Respuesta (ejemplo):

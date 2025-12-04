@@ -147,7 +147,6 @@ public class RedSocial {
         return grafo.recomendarAmigosDeAmigos(idUsuario);
     }
     
-
     public Notificacion[] obtenerNotificaciones(int idUsuario) {
         Usuario usuario = buscarUsuario(idUsuario);
 
@@ -279,58 +278,85 @@ public class RedSocial {
         return listaFinal;
     }
 
-    public Publicacion[] top10Publicaciones() {
+    private Publicacion[] obtenerTodasLasPublicaciones() {
+        //realizamos este metodo privado para poder utilizarlo en dos consultas, y pasamos a un array para poder iterar sobre ellos
 
-        // accedemos al array de las publicaciones
-        listaPublicaciones[] arr = red.mapaPublicacion.almacenamientoPublicaciones;
 
-        // contamos cuantos hay 
+        listaPublicaciones[] listas = mapaPublicacion.almacenamientoPublicaciones; //traemos  el array de nodos
+
         int total = 0;
-        for (int i = 0; i < arr.length; i++) {
-            NodoPublicacion actual = arr[i].cabeza;
+
+        for (int i = 0; i < listas.length; i++) { //recorremos el array, para acceder a cada nodo hasta llegar al null, si es null
+            NodoPublicacion actual = listas[i].cabeza; //seguimos con otra posición del array. 
             while (actual != null) {
-                total++;
                 actual = actual.siguientePublicacion;
+                total++;
             }
         }
 
-        Publicacion[] publicaciones = new Publicacion[total];
+        Publicacion[] arr = new Publicacion[total]; // le pasamos el total de nodos del array 
         int pos = 0;
 
-        // pasamos todas las publicaciones al array, para posteriormetne iterar aplicando bubble sort
-        for (int i = 0; i < arr.length; i++) {
-            NodoPublicacion actual = arr[i].cabeza;
+         for (int i = 0; i < listas.length; i++) { //para posteriormente guardarlos a todos en un nuevo array
+            NodoPublicacion actual = listas[i].cabeza;
             while (actual != null) {
-                publicaciones[pos] = actual.dato;
+                arr[pos] = actual.dato;
                 pos++;
                 actual = actual.siguientePublicacion;
             }
         }
 
-        for (int i = 0; i < publicaciones.length; i++) {
-            for (int j = 0; j < publicaciones.length - 1; j++) {
 
-                int c1 = publicaciones[j].getComentarios().getCantidad();
-                int c2 = publicaciones[j + 1].getComentarios().getCantidad();
+
+        return arr;
+    }
+
+    private void ordenarPublicacionesPorComentarios(Publicacion[] arr) {
+        //Ordenamos los publicaciones por cantidad de comentarios
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - 1; j++) {
+
+                int c1 = arr[j].getComentarios().getCantidad();
+                int c2 = arr[j + 1].getComentarios().getCantidad();
 
                 if (c1 < c2) {
-                    Publicacion aux = publicaciones[j];
-                    publicaciones[j] = publicaciones[j + 1];
-                    publicaciones[j + 1] = aux;
-                }
+                    Publicacion aux = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = aux;
+                } 
             }
         }
+    }
 
-        //limitamos hasta maximo 10, si es menos que traiga el total que tiene el array
-        int limite = publicaciones.length < 10 ? publicaciones.length : 10;
+    public Publicacion[] rankingPublicaciones() {
 
-        Publicacion[] top = new Publicacion[limite];
+    Publicacion[] publicacionesOrdenadas = obtenerTodasLasPublicaciones();
+    ordenarPublicacionesPorComentarios(publicacionesOrdenadas);
 
-        for (int i = 0; i < limite; i++) {
-            top[i] = publicaciones[i];
+    return publicacionesOrdenadas;
+}
+    
+    public Publicacion[] topPublicaciones() {
+
+        Publicacion[] publicacionesOrdenadas = obtenerTodasLasPublicaciones();
+        ordenarPublicacionesPorComentarios(publicacionesOrdenadas);
+
+        int limitePublicaciones = 0; 
+
+        if(publicacionesOrdenadas.length < 10){
+            limitePublicaciones = publicacionesOrdenadas.length;
+        }else{
+           limitePublicaciones = 10;
         }
 
-        return top;
+        
+
+        Publicacion[] top10Publicacions = new Publicacion[limitePublicaciones];
+        for (int i = 0; i < limitePublicaciones; i++) {
+            top10Publicacions[i] = publicacionesOrdenadas[i];
+        }
+
+        return top10Publicacions;
     }
 
     public void cargarUsuariosDemo() {

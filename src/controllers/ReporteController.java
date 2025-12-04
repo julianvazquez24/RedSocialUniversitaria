@@ -1,6 +1,6 @@
 package controllers;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -62,7 +62,14 @@ public class ReporteController {
     @Path("/top10publicaciones")
     @Produces(MediaType.APPLICATION_JSON)
     public Publicacion[] topPublicaciones() {
-        return red.top10Publicaciones();
+        return red.topPublicaciones();
+    }
+
+    @GET
+    @Path("/rankingPublicaciones")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Publicacion[] rankingPublicaciones() {
+        return red.rankingPublicaciones();
     }
 }
 

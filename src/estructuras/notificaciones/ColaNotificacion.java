@@ -1,6 +1,5 @@
 package estructuras.notificaciones;
 import modelos.Notificacion;
-
 public class ColaNotificacion {
 
     private NodoNotificacion frente; //el primero en salir

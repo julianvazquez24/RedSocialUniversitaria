@@ -136,6 +136,8 @@ JAX-RS
 Postman
 
 8. Tabla General de Endpoints
+
+
 | Método | Endpoint                                                          | Descripción                             |
 | ------ | ----------------------------------------------------------------- | --------------------------------------- |
 | GET    | `/usuarios/listar`                                                | Lista todos los usuarios                |

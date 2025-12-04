@@ -10,6 +10,7 @@ public class Usuario {
     private String genero;
     private String nacionalidad;
     private Date fechaRegistro;
+    private int rangoDePopularidad;
 
     private ColaNotificacion colaNotificaciones;
 
@@ -22,12 +23,11 @@ public class Usuario {
         this.nacionalidad = nacionalidad;
         this.fechaRegistro = fechaRegistro;
         this.colaNotificaciones = new ColaNotificacion();
-
+        this.rangoDePopularidad = 0;
     }
 
     public Usuario() {
         this.colaNotificaciones = new ColaNotificacion();
-
     }
     // aca vamos a hacer los getters y setters para traer info luego y no hacerlo en otras clases o controllers
 
@@ -56,6 +56,10 @@ public class Usuario {
         return colaNotificaciones;
     }
 
+    public int getRankingdePopularidad(){
+        return rangoDePopularidad;
+    }
+
 
     
     // setters
@@ -76,6 +80,10 @@ public class Usuario {
     }
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public void setRangoDePopularidad(int rangoDePopularidad){
+        this.rangoDePopularidad = rangoDePopularidad;
     }
 
 

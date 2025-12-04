@@ -71,5 +71,12 @@ public class ReporteController {
     public Publicacion[] rankingPublicaciones() {
         return red.rankingPublicaciones();
     }
+
+    @GET
+    @Path("/nivelPopularidad/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String nivelPopularidad(@PathParam("id") int id) {
+        return red.rankingDePopularidad(id);
+    }
 }
 

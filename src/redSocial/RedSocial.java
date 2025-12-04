@@ -115,10 +115,11 @@ public class RedSocial {
                     null       
             );
             seguido.getColaNotificaciones().ponerEnLaCola(nuevaNotificacion);
+            seguido.setRangoDePopularidad(+1);
             return ("Agregado el usuario " + idSeguido + " Correctamente ");
         }
-        return ("Error en la petición");
 
+        return ("Error en la petición");
     }
 
     public Notificacion[] mostrarNotificaciones(int idUsuario) {
@@ -418,6 +419,28 @@ public class RedSocial {
         }
 
         System.out.println("Usuarios, relaciones, publicaciones y comentarios de prueba creados correctamente.");
+    }
+
+    public String rankingDePopularidad(int id) {
+        Usuario usuario = buscarUsuario(id);
+        int popularidad = usuario.getRankingdePopularidad();
+
+        return switch (popularidad) {
+            case int e when (e >= 0 && e <= 10) ->
+                "El nivel de popularidad del usuario " + usuario.getNombre() + " es de nivel bajo";
+
+            case int e when (e >= 11 && e <= 20) ->
+                "El nivel de popularidad del usuario " + usuario.getNombre() + " es de nivel normal";
+
+            case int e when (e >= 21 && e <= 30) ->
+                "El nivel de popularidad del usuario " + usuario.getNombre() + " es de nivel medio";
+
+            case int e when (e >= 31) ->
+                "El nivel de popularidad del usuario " + usuario.getNombre() + " es de nivel maximo";
+
+            default ->
+                "Valor de popularidad inválido";
+        };
     }
 
 }

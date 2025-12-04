@@ -76,10 +76,14 @@ public class UsuariosControllers {
         return usuarioService.actualizarUsuario(idUsuario, datosModificado);
     }
     
-     @GET
+    
+    @GET
     @Path("/{id}")
      public Usuario obtenerUsuario(@PathParam("id") int id) {
 
+        if(id < 0){
+            return null;
+        }
          Usuario usuario = red.buscarUsuario(id);
 
          if (usuario == null) {
@@ -94,6 +98,10 @@ public class UsuariosControllers {
     public String seguir(@PathParam("idSeguidor") int seguidor,
                          @PathParam("idSeguido") int seguido) 
     {
+        if(seguido <0 || seguidor<0){
+            return ("Los id de usuario son invalidos");
+        }
+
         if (seguidor == seguido) {
             return ("No te pueden seguir a tu mismo");
         }
@@ -106,6 +114,9 @@ public class UsuariosControllers {
     @GET
     @Path("/{id}/seguidos")
     public Usuario[] seguidos(@PathParam("id") int id) {
+        if(id<0){
+            return new Usuario[0];
+        }
         Usuario[] seguidos = red.obtenerSeguidos(id);
         
         if (seguidos == null) {
@@ -118,6 +129,11 @@ public class UsuariosControllers {
     @GET
     @Path("/{id}/seguidores")
     public Usuario[] seguidores(@PathParam("id") int id) {
+
+         if(id<0){
+            return new Usuario[0];
+        }
+
         Usuario[] seguidores = red.obtenerSeguidores(id);
         if (seguidores == null) {
             return new Usuario[0];
@@ -130,6 +146,11 @@ public class UsuariosControllers {
     @Path("/{id1}/amigosEnComun/{id2}")
     public Usuario[] amigosEnComun(@PathParam("id1") int usuarioA,
                                     @PathParam("id2") int usuarioB) {
+
+        if(usuarioA <0 || usuarioB<0){
+            return new Usuario[0];
+        }           
+
         Usuario[] amigosEnComun = red.amigosEnComun(usuarioA, usuarioB);
        
         if (amigosEnComun == null) {
@@ -142,6 +163,11 @@ public class UsuariosControllers {
     @GET
     @Path("/recomendarAmigos/{id}")   // recomendaion de amigos a partir de los amigos de mis amigos.
     public Usuario[] recomendarAmigos(@PathParam("id") int idUsuario) {
+        
+        if(idUsuario < 0){
+            return new Usuario[0];
+        } 
+
         Usuario[] recomendaciones = red.recomendarAmigosDeAmigos(idUsuario);
 
         if (recomendaciones == null) {
@@ -154,6 +180,10 @@ public class UsuariosControllers {
     @GET
     @Path("/{id}/notificaciones")
     public Notificacion[] notificaciones(@PathParam("id") int id) {
+        if(id < 0){
+            return new Notificacion[0];
+        } 
+        
         Notificacion[] notificaciones = red.obtenerNotificaciones(id);
 
         if (notificaciones == null) {

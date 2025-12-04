@@ -1,7 +1,11 @@
-package estructuras.comentarios;
+//En este caso optamos por utilizar una cola, dado que cada nuevo comnetario se apila al final
+//Esto permite agregar nodos al final, sin necesidad de mover o copiar elementos. Tambien
+//mantenemos el orden cronologico de los comentarios, nos era mas practico de utilizar. La operacion de insercion es O(n)
 
-//En este caso utilizamos una lista represtando una fila, agreegando al final
-//dado que el nuevo comentario aparece a lo utlimo
+
+
+
+package estructuras.comentarios;
 import modelos.Comentario;
             
 public class ListaComentario {

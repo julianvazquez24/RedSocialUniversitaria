@@ -1,8 +1,9 @@
-package estructuras.usuarios;
-
-// aca en la cola de usuarios vamos a guardar los indices de cada usuaroi en la matriz de adyacencia 
+//En este caso vamos a guardar los indices de cada usuaroi en la matriz de adyacencia 
 //que tenemos que recorrer para hacer el recorrido fs y encontrar a los amigos de amigos 
+//La cola está implementada mediante un arreglo circular, lo que permite realizar las 
+//operaciones de encolar y desencolar en tiempo constante O(1) sin necesidad de desplazar elementos.
 
+package estructuras.usuarios;
 public class ColaUsuarios {
 
     private int[] usuariosCola;

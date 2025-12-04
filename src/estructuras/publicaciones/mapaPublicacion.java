@@ -1,7 +1,11 @@
-package estructuras.publicaciones;
-//Optamos por utilizar listas enlazada, dado que nunca vamos a saber largo que va a tener, por ende en este caso
-//seguimos direccionando el puntero o otro o le asignamos null, controlando asi su escalabilidad
+//En este caso investigamos varias maneras de hacerlo, concluimos en utilizar un hash,
+//es decir, el arreglo principal actua como tabla, y cada indice es un lista enlazada,
+//manejamos las colisiones mediante encadenamiento separado con la funcion 'asignacionPosicion',
+//En promedio, las operaciones de inserción, busqueda y validacion tienen complejidad O(1). 
+//En el peor caso (todas las claves colisionando), las listas internas pueden crecer hasta tamaño n,
+//llevando las operaciones a O(n).
 
+package estructuras.publicaciones;
 import modelos.Publicacion;
 
 public class mapaPublicacion {
@@ -18,7 +22,8 @@ public class mapaPublicacion {
     }
 
     private int asignacionPosicion(int id) { //hash aca asignamos ala publicacion en que lista se va almacenar
-        return id % capacidad; //siempre da un numero entero. 
+        return id % capacidad; //siempre da un numero entero. Va pasar que varias publicaciones entren dentro de la misma posicion de la lista
+        //pero en este escenario, todas se almacenan en la misma posición de la lista, asi se encadenan una a otra sin importar el orden.
     }
 
     public void agregarPublicacion(Publicacion publicacion) {

@@ -1,3 +1,10 @@
+//En este caso utiilizamos una cola, porque las notificaciones tiene la particularidad
+//de que la primera notifiacion que entra es la primera que se procesa
+//Esto ademas puede escalar sin necesidad de andar redimensionando
+//La complejidad temporal es O(1), dado que no neceista recorrer la lista. 
+
+
+
 package estructuras.notificaciones;
 import modelos.Notificacion;
 public class ColaNotificacion {

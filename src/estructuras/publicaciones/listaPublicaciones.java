@@ -1,9 +1,11 @@
-package estructuras.publicaciones;
-
 //Optamos por utilizar listas enlazada, dado que nunca vamos a saber largo que va a tener, por ende en este caso
 //seguimos direccionando el puntero o otro o le asignamos null, controlando asi su escalabilidad
-//la estructura es una pila la insercion es al inicio
+//la estructura es una pila la insercion es al inicio, su complejidad temporal es O(1),
+// Las operaciones de busqueda y verificación de existencia requieren recorrer la lista completa,
+// por lo cual su complejidad temporal es O(n).
 
+
+package estructuras.publicaciones;
 import modelos.Publicacion;
 
 public class listaPublicaciones {

@@ -136,25 +136,26 @@ JAX-RS
 Postman
 
 8. Tabla General de Endpoints
-Método	Endpoint	Descripción
-GET	/usuarios/listar	Lista todos los usuarios
-POST	/usuarios/crear	Crea un nuevo usuario (requiere JSON)
-DELETE	/usuarios/eliminar/{id}	Elimina usuario por ID
-PUT	/usuarios/editar/{id}	Edita usuario
-GET	/usuarios/{id}	Obtiene un usuario
-POST	/usuarios/{idSeguidor}/seguir/{idSeguido}	Un usuario sigue a otro
-GET	/usuarios/{id}/seguidos	Lista seguidos
-GET	/usuarios/{id}/seguidores	Lista seguidores
-GET	/usuarios/{id1}/amigosEnComun/{id2}	Amigos en común
-GET	/usuarios/recomendarAmigos/{id}	Recomendación de amigos
-GET	/usuarios/{id}/notificaciones	Notificaciones del usuario
-POST	/publicacion/crear/{idUsuario}/{contenido}	Crear publicación
-GET	/publicacion/{idPub}	Obtener publicación
-POST	/publicacion/{idPub}/{texto}/{idUsuario}	Comentar publicación
-GET	/publicacion/comentarios/{idPub}	Obtener comentarios
-GET	/reporte/cargar	Carga datos de prueba
-GET	/reporte/usuariosporfecha/{fechaI}/{fechaF}	Usuarios registrados en rango de fechas
-GET	/reporte/usuariosporGeneroYNacionalidad/{genero}/{nacionalidad}	Filtrar usuarios
-GET	/reporte/top10publicaciones	Top 10 publicaciones
-GET	/reporte/rankingPublicaciones	Ranking general
-GET	/reporte/nivelPopularidad/{id}	Nivel de popularidad
+| Método | Endpoint                                                          | Descripción                             |
+| ------ | ----------------------------------------------------------------- | --------------------------------------- |
+| GET    | `/usuarios/listar`                                                | Lista todos los usuarios                |
+| POST   | `/usuarios/crear`                                                 | Crea un nuevo usuario (requiere JSON)   |
+| DELETE | `/usuarios/eliminar/{id}`                                         | Elimina usuario por ID                  |
+| PUT    | `/usuarios/editar/{id}`                                           | Edita usuario                           |
+| GET    | `/usuarios/{id}`                                                  | Obtiene un usuario                      |
+| POST   | `/usuarios/{idSeguidor}/seguir/{idSeguido}`                       | Un usuario sigue a otro                 |
+| GET    | `/usuarios/{id}/seguidos`                                         | Lista seguidos                          |
+| GET    | `/usuarios/{id}/seguidores`                                       | Lista seguidores                        |
+| GET    | `/usuarios/{id1}/amigosEnComun/{id2}`                             | Amigos en común                         |
+| GET    | `/usuarios/recomendarAmigos/{id}`                                 | Recomendación de amigos                 |
+| GET    | `/usuarios/{id}/notificaciones`                                   | Notificaciones del usuario              |
+| POST   | `/publicacion/crear/{idUsuario}/{contenido}`                      | Crear publicación                       |
+| GET    | `/publicacion/{idPub}`                                            | Obtener publicación                     |
+| POST   | `/publicacion/{idPub}/{texto}/{idUsuario}`                        | Comentar publicación                    |
+| GET    | `/publicacion/comentarios/{idPub}`                                | Obtener comentarios                     |
+| GET    | `/reporte/cargar`                                                 | Carga datos de prueba                   |
+| GET    | `/reporte/usuariosporfecha/{fechaI}/{fechaF}`                     | Usuarios registrados en rango de fechas |
+| GET    | `/reporte/usuariosporGeneroYNacionalidad/{genero}/{nacionalidad}` | Filtrar usuarios                        |
+| GET    | `/reporte/top10publicaciones`                                     | Top 10 publicaciones                    |
+| GET    | `/reporte/rankingPublicaciones`                                   | Ranking general                         |
+| GET    | `/reporte/nivelPopularidad/{id}`                                  | Nivel de popularidad                    |

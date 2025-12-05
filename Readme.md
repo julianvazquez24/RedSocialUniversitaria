@@ -105,6 +105,7 @@ Response (ejemplo):
     "rangoDePopularidad": 3
   }
 ]
+```
 
 b) Crear usuario
 
@@ -125,7 +126,7 @@ Body (raw, JSON), por ejemplo:
     "nacionalidad": "Argentino"
   }
 ]
-
+```
 Response: texto indicando si se creó o no el usuario, por ejemplo:
 
 Se agregó el usuario con ID: 12345
@@ -146,8 +147,9 @@ Body (JSON):
     "genero": "F",
     "nacionalidad": "Uruguaya",
     "rangoDePopularidad": 10
-}
+  }
 ]
+``` 
 
 Response: objeto Usuario actualizado en JSON.
 

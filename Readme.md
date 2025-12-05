@@ -84,7 +84,7 @@ URL: http://localhost:8080/api/usuarios/listar
 Request: sin body.
 
 Response (ejemplo):
-
+```json
 [
   {
     "id": 1,
@@ -115,7 +115,7 @@ URL: http://localhost:8080/api/usuarios/crear
 Headers: Content-Type: application/json
 
 Body (raw, JSON), por ejemplo:
-
+```json
 {
   "id": 0,
   "nombre": "Carlos Gómez",
@@ -136,7 +136,7 @@ Método: PUT
 URL: http://localhost:8080/api/usuarios/editar/1
 
 Body (JSON):
-
+```json
 {
   "nombre": "Ana Actualizada",
   "email": "ana.actualizada@example.com",

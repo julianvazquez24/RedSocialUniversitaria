@@ -5,158 +5,290 @@ La API permite gestionar usuarios, publicaciones, comentarios, seguidores, notif
 
 ---
 
-## 1. Compilación y Ejecución del Servidor
+## 1. Publicación / despliegue de la API
 
-La API se ejecuta mediante Java + JAX-RS utilizando archivos `.jar` que levantan el servidor embebido.
+La API se ejecuta con un servidor HTTP embebido (Grizzly) configurado en la clase app.App. No usamos Maven ni Spring Boot, todo se resuelve con los .jar que están en la carpeta lib.
 
-**Para ejecutar la API:**
+### 1.1. Requisitos previos
 
-1. Tener instalado **JDK 25**.
-2. Abrir el proyecto.
-3. Ejecutar la clase:
+Para poder levantar los servicios:
 
+Tener instalado JDK 25.
 
-app.App
-El servidor se inicia automáticamente en:
+Descargar o descomprimir el proyecto RedSocialUniversitaria-main.
 
+Verificar que la carpeta lib esté junto al proyecto, ya que ahí están las dependencias (Grizzly, Jersey, Jackson, Jakarta, etc.).
+
+### 1.2. Ejecución desde un IDE (lo más sencillo)
+
+Es la forma más simple para el informe y para las pruebas:
+
+Abrir el proyecto en el IDE que uses (por ejemplo IntelliJ IDEA, NetBeans o VS Code con la extensión de Java).
+
+Asegurarse de que la carpeta src esté marcada como Source y que la carpeta lib esté agregada al Classpath del proyecto (en la mayoría de los IDE basta con agregar los .jar como librerías externas).
+
+Buscar la clase app.App.
+
+Ejecutar el método main de App.
+
+La clase App crea un HttpServer con esta URL base:
+
+URI.create("http://localhost:8080/api/")
+
+Si todo está bien, el servidor queda escuchando en:
 
 http://localhost:8080/api/
-2. Pruebas de la API
-Para testear los servicios se utilizó Postman, enviando peticiones HTTP a los distintos endpoints de la API.
 
-3. Endpoints de Usuarios
-Base URL:
+y a partir de ahí se accede a los distintos controladores (/usuarios, /publicacion, /reporte).
 
+---
 
-http://localhost:8080/api/usuarios
-Crear Usuario
-POST /usuarios/crear
+## 2. Verificación básica de que el servidor está funcionando
 
-Body JSON obligatorio:
-*Para identificar el genero utilizamos las siglas masculino (M) y el feminino (F). 
+Una vez levantado el servidor:
+
+Abrir un navegador y probar, por ejemplo:
+
+http://localhost:8080/api/usuarios/listar
+
+Si no hay datos de demo cargados, probablemente devuelva un arreglo vacío [].
+
+También se puede probar el endpoint que carga datos de ejemplo (desde el controlador de reportes):
+
+GET http://localhost:8080/api/reporte/cargar
+
+Si funciona, la respuesta es un mensaje de texto parecido a:
+
+"Datos de usuarios y relaciones cargados correctamente."
+
+Después de eso, al volver a llamar a /usuarios/listar ya deberían aparecer varios usuarios generados automáticamente.
+
+Con eso ya comprobás que el servidor está arriba y que los servicios responden.
+
+---
+
+## 3. Pruebas detalladas de los Web Services (Postman)
+
+La base para todos los endpoints es:
+
+http://localhost:8080/api
+
+### 3.1. Servicios de usuarios
+
+a) Listar usuarios
+
+Método: GET
+
+URL: http://localhost:8080/api/usuarios/listar
+
+Request: sin body.
+
+Response (ejemplo):
+
+[
+  {
+    "id": 1,
+    "nombre": "Ana Pérez",
+    "email": "ana@example.com",
+    "genero": "F",
+    "nacionalidad": "Uruguaya",
+    "fechaRegistro": "2025-11-21T10:30:00",
+    "rangoDePopularidad": 5
+  },
+  {
+    "id": 2,
+    "nombre": "Juan López",
+    "email": "juan@example.com",
+    "genero": "M",
+    "nacionalidad": "Uruguaya",
+    "fechaRegistro": "2025-11-18T16:00:00",
+    "rangoDePopularidad": 3
+  }
+]
+
+b) Crear usuario
+
+Método: POST
+
+URL: http://localhost:8080/api/usuarios/crear
+
+Headers: Content-Type: application/json
+
+Body (raw, JSON), por ejemplo:
+
 {
-  "nombre": "juli",
-  "email": "juli@gmail.com",
-  "genero": "M", //O "F" 
-  "nacionalidad": "uruguay"
+  "id": 0,
+  "nombre": "Carlos Gómez",
+  "email": "carlos@example.com",
+  "genero": "M" o "F",
+  "nacionalidad": "Argentino"
 }
-Respuesta (ejemplo):
 
+Response: texto indicando si se creó o no el usuario, por ejemplo:
 
-Se agregó el usuario con ID: X
-Eliminar Usuario
-DELETE /usuarios/eliminar/{idUsuario}
+Se agregó el usuario con ID: 12345
+Para identificar los generos, solo manejamos dos opciones M o F haciendo referiencia a masculino o femenino.
 
-Editar Usuario
-PUT /usuarios/editar/{idUsuario}
+c) Editar usuario
 
-Body: JSON con los campos a modificar.
+Método: PUT
 
-Listar Usuarios
-GET /usuarios/listar
+URL: http://localhost:8080/api/usuarios/editar/1
 
-Obtener Usuario
-GET /usuarios/{idUsuario}
+Body (JSON):
 
-Seguir Usuario
-POST /usuarios/{idSeguidor}/seguir/{idSeguido}
+{
+  "nombre": "Ana Actualizada",
+  "email": "ana.actualizada@example.com",
+  "genero": "F",
+  "nacionalidad": "Uruguaya",
+  "rangoDePopularidad": 10
+}
 
-Obtener Seguidos
-GET /usuarios/{id}/seguidos
+Response: objeto Usuario actualizado en JSON.
 
-Obtener Seguidores
-GET /usuarios/{id}/seguidores
+d) Eliminar usuario
 
-Amigos en Común
-GET /usuarios/{id1}/amigosEnComun/{id2}
+Método: DELETE
 
-Recomendación de Amigos
-GET /usuarios/recomendarAmigos/{id}
+URL: http://localhost:8080/api/usuarios/eliminar/1
 
-Notificaciones
-GET /usuarios/{id}/notificaciones
+Response: texto indicando el resultado, por ejemplo:
 
-4. Endpoints de Publicaciones
-Base URL:
+Se eliminó el usuario con id: 1
 
+e) Seguir a otro usuario
+
+Método: POST
+
+URL: http://localhost:8080/api/usuarios/2/seguir/3
+(el usuario 2 pasa a seguir al 3).
+
+Response: texto con el mensaje generado por la lógica de la red.
+
+f) Ver seguidos / seguidores
+
+Seguidos:
+GET http://localhost:8080/api/usuarios/2/seguidos
+
+Seguidores:
+GET http://localhost:8080/api/usuarios/3/seguidores
+
+Ambos devuelven arrays de Usuario en formato JSON.
+
+g) Recomendación de amigos y amigos en común
+
+Amigos en común:
+GET http://localhost:8080/api/usuarios/1/amigosEnComun/2
+
+Recomendación de amigos (amigos de amigos):
+GET http://localhost:8080/api/usuarios/recomendarAmigos/1
+
+Devuelven listas de usuarios recomendados o en común.
+
+h) Notificaciones
+
+Método: GET
+
+URL: http://localhost:8080/api/usuarios/1/notificaciones
+
+Response: Notificacion[] en JSON.
+
+---
+
+### 3.2. Servicios de publicaciones
+
+Base URL de publicaciones:
 
 http://localhost:8080/api/publicacion
-Crear Publicación
-POST /publicacion/crear/{idUsuario}/{contenido}
 
-Obtener Publicación
-GET /publicacion/{idPublicacion}
+a) Crear publicación
 
-Comentar Publicación
-POST /publicacion/{idPub}/{texto}/{idUsuario}
+Método: POST
 
-Obtener Comentarios
-GET /publicacion/comentarios/{idPublicacion}
+URL: http://localhost:8080/api/publicacion/crear/1/Hola%20mundo%20universitario
 
-5. Endpoints de Reportes
-Base URL:
+Acá tanto el idUsuario como el contenido se pasan en la URL como PathParam.
 
+Response: objeto Publicacion creado.
+
+b) Obtener publicación
+
+Método: GET
+
+URL: http://localhost:8080/api/publicacion/101
+
+Response: Publicacion en JSON.
+
+c) Comentar una publicación
+
+Método: POST
+
+URL:
+http://localhost:8080/api/publicacion/101/Éxitos%20en%20la%20facultad/2
+
+(usuario 2 comenta “Éxitos en la facultad” en la publicación 101).
+
+Response: objeto Comentario con autor, contenido y fecha.
+
+d) Listar comentarios de una publicación
+
+Método: GET
+
+URL: http://localhost:8080/api/publicacion/comentarios/101
+
+Response: array de Comentario en JSON.
+
+---
+
+### 3.3. Servicios de reportes
+
+Base URL de reportes:
 
 http://localhost:8080/api/reporte
-Cargar Datos de Prueba
-GET /reporte/cargar
 
-Usuarios por Fecha
-GET /reporte/usuariosporfecha/{fechaInicio}/{fechaFin}
+a) Cargar datos de prueba
+
+Método: GET
+
+URL: http://localhost:8080/api/reporte/cargar
+
+Response: mensaje de texto confirmando la carga.
+
+b) Usuarios registrados por rango de fechas
+
+Método: GET
+
+URL:
+http://localhost:8080/api/reporte/usuariosporfecha/2025-11-01/2025-11-30
 
 Formato de fecha: yyyy-MM-dd.
 
-Filtrar por Género y Nacionalidad
-GET /reporte/usuariosporGeneroYNacionalidad/{genero}/{nacionalidad}
+Response: Usuario[] con los usuarios registrados en ese rango.
 
-Top 10 Publicaciones
-GET /reporte/top10publicaciones
+c) Usuarios por género y nacionalidad
 
-Ranking de Publicaciones
-GET /reporte/rankingPublicaciones
+Método: GET
 
-Nivel de Popularidad
-GET /reporte/nivelPopularidad/{idUsuario}
+URL:
+http://localhost:8080/api/reporte/usuariosporGeneroYNacionalidad/Femenino/Uruguaya
 
-6. Validaciones Implementadas
-Campos vacíos → retornan [] o mensajes claros.
+Response: Usuario[] filtrados.
 
-IDs negativos → no se procesan.
+d) Top 10 y ranking de publicaciones
 
-JSON inválido → no se crea el usuario.
+Top 10:
+GET http://localhost:8080/api/reporte/top10publicaciones
 
-Se evitan operaciones incoherentes (seguirse a sí mismo, publicaciones vacías, etc.).
+Ranking general:
+GET http://localhost:8080/api/reporte/rankingPublicaciones
 
-7. Herramientas Utilizadas
-Java
+En ambos casos la respuesta es un array de Publicacion ordenado según la lógica definida en RedSocial.
 
-JAX-RS
+e) Nivel de popularidad de un usuario
 
-Postman
+Método: GET
 
-8. Tabla General de Endpoints
+URL: http://localhost:8080/api/reporte/nivelPopularidad/1
 
-
-| Método | Endpoint                                                          | Descripción                             |
-| ------ | ----------------------------------------------------------------- | --------------------------------------- |
-| GET    | `/usuarios/listar`                                                | Lista todos los usuarios                |
-| POST   | `/usuarios/crear`                                                 | Crea un nuevo usuario (requiere JSON)   |
-| DELETE | `/usuarios/eliminar/{id}`                                         | Elimina usuario por ID                  |
-| PUT    | `/usuarios/editar/{id}`                                           | Edita usuario                           |
-| GET    | `/usuarios/{id}`                                                  | Obtiene un usuario                      |
-| POST   | `/usuarios/{idSeguidor}/seguir/{idSeguido}`                       | Un usuario sigue a otro                 |
-| GET    | `/usuarios/{id}/seguidos`                                         | Lista seguidos                          |
-| GET    | `/usuarios/{id}/seguidores`                                       | Lista seguidores                        |
-| GET    | `/usuarios/{id1}/amigosEnComun/{id2}`                             | Amigos en común                         |
-| GET    | `/usuarios/recomendarAmigos/{id}`                                 | Recomendación de amigos                 |
-| GET    | `/usuarios/{id}/notificaciones`                                   | Notificaciones del usuario              |
-| POST   | `/publicacion/crear/{idUsuario}/{contenido}`                      | Crear publicación                       |
-| GET    | `/publicacion/{idPub}`                                            | Obtener publicación                     |
-| POST   | `/publicacion/{idPub}/{texto}/{idUsuario}`                        | Comentar publicación                    |
-| GET    | `/publicacion/comentarios/{idPub}`                                | Obtener comentarios                     |
-| GET    | `/reporte/cargar`                                                 | Carga datos de prueba                   |
-| GET    | `/reporte/usuariosporfecha/{fechaI}/{fechaF}`                     | Usuarios registrados en rango de fechas |
-| GET    | `/reporte/usuariosporGeneroYNacionalidad/{genero}/{nacionalidad}` | Filtrar usuarios                        |
-| GET    | `/reporte/top10publicaciones`                                     | Top 10 publicaciones                    |
-| GET    | `/reporte/rankingPublicaciones`                                   | Ranking general                         |
-| GET    | `/reporte/nivelPopularidad/{id}`                                  | Nivel de popularidad                    |
+Response: texto con la interpretación del nivel de popularidad del usuario (bajo, normal, medio, máximo, etc.).

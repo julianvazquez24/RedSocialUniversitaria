@@ -115,14 +115,16 @@ URL: http://localhost:8080/api/usuarios/crear
 Headers: Content-Type: application/json
 
 Body (raw, JSON), por ejemplo:
-
-{
-  "id": 0,
-  "nombre": "Carlos Gómez",
-  "email": "carlos@example.com",
-  "genero": "M" o "F",
-  "nacionalidad": "Argentino"
-}
+```json
+[
+  {
+    "id": 0,
+    "nombre": "Carlos Gómez",
+    "email": "carlos@example.com",
+    "genero": "M" o "F",
+    "nacionalidad": "Argentino"
+  }
+]
 
 Response: texto indicando si se creó o no el usuario, por ejemplo:
 
@@ -136,14 +138,16 @@ Método: PUT
 URL: http://localhost:8080/api/usuarios/editar/1
 
 Body (JSON):
-
-{
-  "nombre": "Ana Actualizada",
-  "email": "ana.actualizada@example.com",
-  "genero": "F",
-  "nacionalidad": "Uruguaya",
-  "rangoDePopularidad": 10
+```json
+[
+  {
+    "nombre": "Ana Actualizada",
+    "email": "ana.actualizada@example.com",
+    "genero": "F",
+    "nacionalidad": "Uruguaya",
+    "rangoDePopularidad": 10
 }
+]
 
 Response: objeto Usuario actualizado en JSON.
 

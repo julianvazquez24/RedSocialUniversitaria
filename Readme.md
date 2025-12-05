@@ -65,5 +65,7 @@ Después de eso, al volver a llamar a /usuarios/listar ya deberían aparecer var
 
 Con eso ya comprobás que el servidor está arriba y que los servicios responden.
 
+A su vez, creamos una coleccion de postman en la cual testear los diversos endpoints realizados, el link de acceso a la coleccion es el siguiente:  https://interstellar-astronaut-263049.postman.co/workspace/My-Workspace~8b066d3a-856f-4e17-8167-73d997184125/collection/42268792-5259415b-0a63-4a9b-8e9a-77efe1f84b5f?action=share&creator=42268792
+
 ---
 
